@@ -1,13 +1,15 @@
+
 var React = require('react');
 var ReactDOM = require('react-dom');
 
 var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
+var Router  = ReactRouter.Router;
 var Route = ReactRouter.Route;
+var History = ReactRouter.History;
 var Navigation = ReactRouter.Navigation;
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
-var helper = require('./helpers');
+var h = require('./helpers');
 /*
   App
 */
@@ -18,7 +20,7 @@ var App = React.createClass({
     return (
       <div className="catch-of-the-day">
         <div className="menu">
-          <Header tagline="Fresh Seafood Market"/>
+          <Header tagline="Fresh Seafood Market" />
         </div>
         <Order/>
         <Inventory/>
@@ -40,12 +42,12 @@ var Header = React.createClass({
             <span className="of">of</span>
             <span className="the">the</span>
           </span>
-        Day</h1>
+          Day</h1>
         <h3 className="tagline"><span>{this.props.tagline}</span></h3>
       </header>
     )
   }
-});
+})
 
 /*
   Order
@@ -57,7 +59,7 @@ var Order = React.createClass({
       <p>Order</p>
     )
   }
-});
+})
 
 /*
   Inventory
@@ -69,7 +71,7 @@ var Inventory = React.createClass({
       <p>Inventory</p>
     )
   }
-});
+})
 
 
 /*
@@ -78,27 +80,35 @@ var Inventory = React.createClass({
 */
 
 var StorePicker = React.createClass({
-
+  mixins : [History],
+  goToStore : function(event) {
+    event.preventDefault();
+    //get the data from the input
+    var storeId = this.refs.storeId.value;
+    this.history.pushState(null, '/store/' + storeId);
+  },
   render : function() {
     return (
-      <form className="store-selector">
+      <form className="store-selector" onSubmit={this.goToStore}>
         <h2>Please Enter A Store</h2>
-        <input type="text" ref="storeId" defaultValue={helper.getFunName()}required />
+        <input type="text" ref="storeId" defaultValue={h.getFunName()} required />
         <input type="Submit" />
       </form>
     )
   }
+
 });
 
 /*
- Not Found
+  Not Found
 */
 
 var NotFound = React.createClass({
-    render: function() {
-      return <h1>Not Found!</h1>
-    }
+  render : function() {
+    return <h1>Not Found!</h1>
+  }
 });
+
 
 /*
   Routes
@@ -111,6 +121,5 @@ var routes = (
     <Route path="*" component={NotFound}/>
   </Router>
 )
-
 
 ReactDOM.render(routes, document.querySelector('#main'));
