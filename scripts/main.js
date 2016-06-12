@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var CSSTransitionGroup = require('react-addons-css-transition-group');
 
 var ReactRouter = require('react-router');
 var Router  = ReactRouter.Router;
@@ -194,7 +195,7 @@ var Order = React.createClass({
   renderOrder : function(key) {
     var fish = this.props.fishes[key];
     var count = this.props.order[key];
-    var removeButton = <button onClick={this.props.removeFromOrder.bind(null, key)}>&times;</button>
+    var removeButton = <button onClick={this.props.removeFromOrder.bind(null,key)}>&times;</button>
 
     if(!fish) {
       return <li key={key}>Sorry, fish no longer available! {removeButton}</li>
@@ -202,10 +203,14 @@ var Order = React.createClass({
 
     return (
       <li key={key}>
-        {count}lbs
-        {fish.name}
+        <span>
+          <CSSTransitionGroup component="span" transitionName="count" transitionLeaveTimeout={250} transitionEnterTimeout={250} className="count">
+            <span key={count}>{count}</span>
+          </CSSTransitionGroup>
+
+          lbs {fish.name} {removeButton}
+        </span>
         <span className="price">{h.formatPrice(count * fish.price)}</span>
-        {removeButton}
       </li>)
   },
   render : function() {
@@ -226,15 +231,28 @@ var Order = React.createClass({
     return (
       <div className="order-wrap">
         <h2 className="order-title">Your Order</h2>
-        <ul className="order">
+
+        <CSSTransitionGroup
+              className="order"
+              component="ul"
+              transitionName="order"
+              transitionEnterTimeout={500}
+              transitionLeaveTimeout={500}
+            >
           {orderIds.map(this.renderOrder)}
           <li className="total">
             <strong>Total:</strong>
             {h.formatPrice(total)}
           </li>
-        </ul>
+        </CSSTransitionGroup>
+
       </div>
     )
+  },
+  propTypes : {
+    fishes : React.PropTypes.object.isRequired,
+    order : React.PropTypes.object.isRequired,
+    removeFromOrder : React.PropTypes.func.isRequired
   }
 })
 
