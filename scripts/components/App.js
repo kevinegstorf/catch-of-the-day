@@ -11,7 +11,7 @@ import Catalyst from 'react-catalyst';
 
 // Firebase
 import Rebase  from 're-base';
-var base = Rebase.createClass('https://catch-of-the-day.firebaseio.com/');
+var base = Rebase.createClass('https://resplendent-fire-6859.firebaseio.com/');
 
 var App = React.createClass({
   mixins : [Catalyst.LinkedStateMixin],
