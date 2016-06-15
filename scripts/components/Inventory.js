@@ -7,7 +7,7 @@ import React from 'react';
 import AddFishForm from './AddFishForm';
 import autobind from 'autobind-decorator';
 import Firebase from 'firebase';
-const ref = new Firebase('https://catch-of-the-day.firebaseio.com/');
+const ref = new Firebase('https://resplendent-fire-6859.firebaseio.com/');
 
 @autobind
 class Inventory extends React.Component {
